@@ -14,10 +14,10 @@ import "flowbite";
 export default function Header() {
   const path = useLocation().pathname;
   return (
-    <Navbar className="border-b-2 !bg-white">
+    <Navbar className="border-b-2 dark:bg-black dark:text-white">
       <Link
         to="/"
-        className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-black"
+        className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-puple-500 to-pink-500 rounded-lg text-white">
           U

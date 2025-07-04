@@ -10,15 +10,17 @@ import Header from "./Components/Header";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/About" element={<About />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/Projects" element={<Projects />} />
-        <Route path="/SignIn" element={<SignIn />} />
-        <Route path="/SignUp" element={<SignUp />} />
-      </Routes>
+      <div className="dark:bg-black">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Projects" element={<Projects />} />
+          <Route path="/SignIn" element={<SignIn />} />
+          <Route path="/SignUp" element={<SignUp />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
