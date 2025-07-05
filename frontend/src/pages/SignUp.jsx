@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { Label, TextInput, Button } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -11,14 +14,28 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage("Please fill out all fields.");
+    }
     try {
+      setLoading(true);
+      setErrorMessage(null);
       const res = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: { "content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-    } catch (e) {
-      console.log(e);
+      const data = await res.json();
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigate("/signin");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
     }
   };
   return (
@@ -57,7 +74,14 @@ export default function SignUp() {
               type="submit"
               onClick={handleSubmit}
             >
-              Sign Up
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading...</span>
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </form>
           <div>
@@ -66,6 +90,11 @@ export default function SignUp() {
               Sign In
             </Link>
           </div>
+          {errorMessage && (
+            <Alert className="mt-5" color="failure">
+              {errorMessage}
+            </Alert>
+          )}
         </div>
       </div>
     </div>

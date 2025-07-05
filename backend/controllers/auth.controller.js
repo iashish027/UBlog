@@ -34,7 +34,7 @@ const signup = async (req, res, next) => {
     });
     await newUser.save();
     return res.status(200).json({
-      success: false,
+      success: true,
       statusCode: 200,
       message: "succefully saved user",
     });
