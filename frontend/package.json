@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "axios": "^1.10.0",
+    "bcryptjs": "^3.0.2",
     "flowbite": "^3.1.2",
     "flowbite-react": "^0.11.8",
     "init": "^0.1.2",
+    "jsonwebtoken": "^9.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
