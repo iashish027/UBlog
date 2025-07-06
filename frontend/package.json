@@ -11,6 +11,7 @@
     "postinstall": "flowbite-react patch"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "flowbite": "^3.1.2",
@@ -21,6 +22,7 @@
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
     "react-quill-new": "^3.4.6",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2"
   },
   "devDependencies": {
