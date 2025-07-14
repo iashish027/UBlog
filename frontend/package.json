@@ -14,17 +14,20 @@
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
+    "firebase": "^11.10.0",
     "flowbite": "^3.1.2",
     "flowbite-react": "^0.11.8",
     "init": "^0.1.2",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
     "react-quill-new": "^3.4.6",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "redux-persist-transform-filter": "^0.0.22"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

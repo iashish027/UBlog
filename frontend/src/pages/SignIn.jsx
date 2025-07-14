@@ -5,12 +5,13 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
-} from "../redux/user/userSlice.js";
+} from "../redux/signin/signinSlice.js";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from "../Components/OAuth.jsx";
 
-export default function SignUp() {
+export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const { loading, error: errorMessage } = useSelector((state) => state.signin);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -85,6 +86,7 @@ export default function SignUp() {
                 "Sign In"
               )}
             </Button>
+            <OAuth />
           </form>
           <div>
             <span>Have an account? </span>

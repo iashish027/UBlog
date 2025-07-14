@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Header from "./Components/Header";
 import FooterComponent from "./Components/FooterComponent";
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/Projects" element={<Projects />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
         <FooterComponent />
       </div>

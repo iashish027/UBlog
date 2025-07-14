@@ -1,17 +1,27 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import userReducer from "./user/userSlice";
+import signinReducer from "./signin/signinSlice";
+import signupReducer from "./signup/signupSlice";
 import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
+import createFilter from "redux-persist-transform-filter";
+
+const signinFilter = createFilter("signin", ["currentUser"]); // Only persist currentUser
+const signupFilter = createFilter("signup", ["successMessage"]); // Example for signup
+
 const rootReducer = combineReducers({
-  user: userReducer,
+  signin: signinReducer,
+  signup: signupReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
   version: 1,
+  transforms: [signinFilter, signupFilter],
 };
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>

@@ -5,6 +5,7 @@ import cors from "cors";
 
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import verifyEmailRoutes from "./routes/verify-email.route.js";
 dotenv.config();
 const app = express();
 
@@ -19,6 +20,11 @@ mongoose
 app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/verify-email", verifyEmailRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: "Route not found" });
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
