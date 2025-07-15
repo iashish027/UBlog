@@ -2,7 +2,6 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import OAuth from "../Components/OAuth";
 import {
   signupStart,
   signupSuccess,
@@ -89,7 +88,6 @@ export default function SignUp() {
                 "Sign Up"
               )}
             </Button>
-            <OAuth />
           </form>
           <div>
             <span>Have an account? </span>

@@ -7,7 +7,6 @@ import {
   signInFailure,
 } from "../redux/signin/signinSlice.js";
 import { useDispatch, useSelector } from "react-redux";
-import OAuth from "../Components/OAuth.jsx";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -86,7 +85,6 @@ export default function SignIn() {
                 "Sign In"
               )}
             </Button>
-            <OAuth />
           </form>
           <div>
             <span>Have an account? </span>

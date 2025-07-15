@@ -6,7 +6,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import createFilter from "redux-persist-transform-filter";
 
 const signinFilter = createFilter("signin", ["currentUser"]); // Only persist currentUser
-const signupFilter = createFilter("signup", ["successMessage"]); // Example for signup
+const signupFilter = createFilter("signup", []); // Example for signup
 
 const rootReducer = combineReducers({
   signin: signinReducer,
