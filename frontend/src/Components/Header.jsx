@@ -7,12 +7,22 @@ import {
   NavbarCollapse,
   NavbarLink,
   NavbarToggle,
+  Avatar,
 } from "flowbite-react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { FaMoon } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import "flowbite";
+
 export default function Header() {
   const path = useLocation().pathname;
+  const currentUser = useSelector((state) => state.signin.currentUser);
+
+  // Get first letter of name or email
+  const userInitial = currentUser
+    ? (currentUser.username || currentUser.email || "U")[0].toUpperCase()
+    : null;
+
   return (
     <Navbar className="border-b-2 dark:bg-black dark:text-white">
       <Link
@@ -47,15 +57,25 @@ export default function Header() {
         <Button className="w-12 h-10 hidden sm:inline bg-gray-100" pill>
           <FaMoon className="text-black" />
         </Button>
-        <Link to="/SignIn">
-          <Button
-            className="bg-gradient-to-r from-purple-500 to-blue-500"
-            outline
-          >
-            Sign in
-          </Button>
-        </Link>
-        <NavbarToggle></NavbarToggle>
+        {currentUser ? (
+          <Link to="/profile">
+            <Avatar
+              rounded
+              placeholderInitials={userInitial}
+              className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold flex items-center justify-center"
+            />
+          </Link>
+        ) : (
+          <Link to="/signin">
+            <Button
+              className="bg-gradient-to-r from-purple-500 to-blue-500"
+              outline
+            >
+              Sign in
+            </Button>
+          </Link>
+        )}
+        <NavbarToggle />
       </div>
       <NavbarCollapse>
         <NavbarLink as={"div"} active={path === "/"}>
