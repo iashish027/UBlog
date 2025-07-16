@@ -4,6 +4,7 @@ import signupReducer from "./signup/signupSlice";
 import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
 import createFilter from "redux-persist-transform-filter";
+import themeReducer from "./theme/themeSlice";
 
 const signinFilter = createFilter("signin", ["currentUser"]); // Only persist currentUser
 const signupFilter = createFilter("signup", []); // Example for signup
@@ -11,6 +12,7 @@ const signupFilter = createFilter("signup", []); // Example for signup
 const rootReducer = combineReducers({
   signin: signinReducer,
   signup: signupReducer,
+  theme: themeReducer,
 });
 
 const persistConfig = {

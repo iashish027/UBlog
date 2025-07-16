@@ -10,30 +10,24 @@ import {
   Avatar,
 } from "flowbite-react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import "flowbite";
-
+import { toggleTheme } from "../redux/theme/themeSlice";
+import Logo from "./Logo";
 export default function Header() {
   const path = useLocation().pathname;
   const currentUser = useSelector((state) => state.signin.currentUser);
-
+  const currentTheme = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
   // Get first letter of name or email
   const userInitial = currentUser
     ? (currentUser.username || currentUser.email || "U")[0].toUpperCase()
     : null;
 
   return (
-    <Navbar className="border-b-2 dark:bg-black dark:text-white">
-      <Link
-        to="/"
-        className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold"
-      >
-        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-puple-500 to-pink-500 rounded-lg text-white">
-          U
-        </span>
-        Blog
-      </Link>
+    <Navbar className="border-b-2">
+      <Logo size="md" />
 
       <form>
         <TextInput
@@ -54,8 +48,16 @@ export default function Header() {
         <AiOutlineSearch className="text-black" />
       </Button>
       <div className="flex gap-2 items-center justify-end md:order-2">
-        <Button className="w-12 h-10 hidden sm:inline bg-gray-100" pill>
-          <FaMoon className="text-black" />
+        <Button
+          className="w-12 h-10 hidden sm:inline dark:bg-gray-100 bg-[rgb(16,23,42)]"
+          onClick={() => dispatch(toggleTheme())}
+          pill
+        >
+          {currentTheme.theme === "dark" ? (
+            <FaMoon className="text-black" />
+          ) : (
+            <FaSun className="text-white" />
+          )}
         </Button>
         {currentUser ? (
           <Link to="/profile">
@@ -78,13 +80,43 @@ export default function Header() {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink as={"div"} active={path === "/"}>
+        <NavbarLink
+          as={"div"}
+          active={path === "/"}
+          theme={{
+            base: "text-gray-900 dark:text-white",
+            active: {
+              on: "text-blue-600 font-semibold",
+              off: "text-gray-900",
+            },
+          }}
+        >
           <Link to="/">Home</Link>
         </NavbarLink>
-        <NavbarLink as={"div"} active={path === "/about"}>
+        <NavbarLink
+          as={"div"}
+          active={path === "/about"}
+          theme={{
+            base: "text-gray-900 dark:text-white",
+            active: {
+              on: "text-blue-600 font-semibold",
+              off: "text-gray-900",
+            },
+          }}
+        >
           <Link to="/about">About us</Link>
         </NavbarLink>
-        <NavbarLink as={"div"} active={path === "/projects"}>
+        <NavbarLink
+          as={"div"}
+          active={path === "/projects"}
+          theme={{
+            base: "text-gray-900 dark:text-white",
+            active: {
+              on: "text-blue-600 font-semibold",
+              off: "text-gray-900",
+            },
+          }}
+        >
           <Link to="/projects">Projects</Link>
         </NavbarLink>
       </NavbarCollapse>

@@ -7,6 +7,7 @@ import {
   signInFailure,
 } from "../redux/signin/signinSlice.js";
 import { useDispatch, useSelector } from "react-redux";
+import Logo from "../Components/Logo.jsx";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -49,12 +50,7 @@ export default function SignIn() {
       <div className="p-5 flex flex-col gap-5 sm:flex-row mx-auto max-w-3xl sm:items-center sm:justify-center">
         {/* left */}
         <div className="flex-1">
-          <Link to="/" className=" text-4xl l font-semibold ">
-            <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-puple-500 to-pink-500 rounded-lg text-white">
-              U
-            </span>
-            Blog
-          </Link>
+          <Logo size="4xl" />
           <p className="text-sm mt-5">
             Sign in with your email and password or with google.
           </p>
@@ -62,14 +58,10 @@ export default function SignIn() {
 
         {/* right */}
         <div className="flex-1">
-          <form className="text-black">
-            <Label htmlFor="email" className="text-black">
-              Email
-            </Label>
+          <form>
+            <Label htmlFor="email">Email</Label>
             <TextInput type="email" id="email" onChange={handleChange} />
-            <Label htmlFor="password" className="text-black">
-              Password
-            </Label>
+            <Label htmlFor="password">Password</Label>
             <TextInput type="password" id="password" onChange={handleChange} />
             <Button
               className="bg-gradient-to-r from-indigo-500 via-puple-500 to-pink-500 mt-2"

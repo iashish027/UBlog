@@ -12,17 +12,19 @@ import FooterComponent from "./Components/FooterComponent";
 function App() {
   return (
     <BrowserRouter>
-      <div className="dark:bg-black">
+      <div>
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/About" element={<About />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Projects" element={<Projects />} />
-          <Route path="/SignIn" element={<SignIn />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-        </Routes>
+        <div className="min-h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/About" element={<About />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/Projects" element={<Projects />} />
+            <Route path="/SignIn" element={<SignIn />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+          </Routes>
+        </div>
         <FooterComponent />
       </div>
     </BrowserRouter>
