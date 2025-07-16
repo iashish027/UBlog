@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Header from "./Components/Header";
 import FooterComponent from "./Components/FooterComponent";
+import PrivateRoute from "./Components/PrivateRoute.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -18,8 +19,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/About" element={<About />} />
-            <Route path="/Dashboard" element={<Dashboard />} />
-            <Route path="/Projects" element={<Projects />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/Projects" element={<Projects />} />
+            </Route>
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
