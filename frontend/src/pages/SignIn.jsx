@@ -5,13 +5,13 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
-} from "../redux/signin/signinSlice.js";
+} from "../redux/user/userSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../Components/Logo.jsx";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const { loading, error: errorMessage } = useSelector((state) => state.signin);
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

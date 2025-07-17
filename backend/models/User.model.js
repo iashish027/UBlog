@@ -20,8 +20,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    imageUrl: {
+      type: String,
+      default: null,
+    },
     verificationToken: String,
-    verificationTokenExpires: Date, 
+    verificationTokenExpires: Date,
   },
   { timestamps: true }
 );

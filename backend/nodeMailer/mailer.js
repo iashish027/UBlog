@@ -15,12 +15,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// 2. Optionally verify at startup
-// transporter
-//   .verify()
-//   .then(() => console.log("✅ SMTP transporter ready"))
-//   .catch((err) => console.error("❌ SMTP config error:", err));
-
 // 3. Export a helper function
 export async function sendMail({ to, subject, text }) {
   if (!to || !text) {

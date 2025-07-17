@@ -17,7 +17,7 @@ import { toggleTheme } from "../redux/theme/themeSlice";
 import Logo from "./Logo";
 export default function Header() {
   const path = useLocation().pathname;
-  const currentUser = useSelector((state) => state.signin.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const currentTheme = useSelector((state) => state.theme);
   const dispatch = useDispatch();
   // Get first letter of name or email
