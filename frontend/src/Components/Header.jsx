@@ -106,19 +106,6 @@ export default function Header() {
         >
           <Link to="/about">About us</Link>
         </NavbarLink>
-        <NavbarLink
-          as={"div"}
-          active={path === "/projects"}
-          theme={{
-            base: "text-gray-900 dark:text-white",
-            active: {
-              on: "text-blue-600 font-semibold",
-              off: "text-gray-900",
-            },
-          }}
-        >
-          <Link to="/projects">Projects</Link>
-        </NavbarLink>
       </NavbarCollapse>
     </Navbar>
   );
