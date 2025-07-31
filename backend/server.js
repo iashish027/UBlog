@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
-import userRoutes from "./routes/user.route.js";
+// import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import verifyEmailRoutes from "./routes/verify-email.route.js";
+import imageRoutes from "./routes/imageUpload.route.js";
 dotenv.config();
 const app = express();
 
@@ -18,9 +19,10 @@ mongoose
 //Routes
 
 app.use(express.json());
-app.use("/api/user", userRoutes);
+// app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/verify-email", verifyEmailRoutes);
+app.use("/api/images", imageRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });

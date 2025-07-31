@@ -105,7 +105,7 @@ const signup = async (req, res, next) => {
         "succefully saved user, Verification mail sent to your email, please verify",
     });
   } catch (err) {
-    console.log(err);
+    
     next(err);
   }
 };
