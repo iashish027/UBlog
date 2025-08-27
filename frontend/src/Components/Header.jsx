@@ -60,7 +60,7 @@ export default function Header() {
           )}
         </Button>
         {currentUser ? (
-          <Link to="/profile">
+          <Link to="/dashboard">
             <Avatar
               rounded
               placeholderInitials={userInitial}

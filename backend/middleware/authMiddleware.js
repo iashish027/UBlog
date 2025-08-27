@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 
 // Middleware to protect routes
-export default authenticateToken = (req, res, next) => {
+export default (req, res, next) => {
   // 1. Access the cookie
-  const token = req.cookies.jwtToken; // 'jwtToken' is the name of your cookie
+  console.log(req);
+  const token = req.cookies.access_token; // 'jwtToken' is the name of your cookie
 
   if (!token) {
     return res.status(401).json({ message: "Authentication token missing" });

@@ -2,8 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 // import userRoutes from "./routes/user.route.js";
+import postRoutes from "./routes/post.route.js";
 import authRoutes from "./routes/auth.route.js";
 import verifyEmailRoutes from "./routes/verify-email.route.js";
 import imageRoutes from "./routes/imageUpload.route.js";
@@ -12,14 +14,16 @@ const app = express();
 
 //connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error : ", err));
+.connect(process.env.MONGODB_URI)
+.then(() => console.log("MongoDB connected"))
+.catch((err) => console.error("MongoDB connection error : ", err));
 
 //Routes
 
 app.use(express.json());
+app.use(cookieParser());
 // app.use("/api/user", userRoutes);
+app.use("/api/posts", postRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/verify-email", verifyEmailRoutes);
 app.use("/api/images", imageRoutes);

@@ -13,6 +13,13 @@ export default function DashSideBar() {
           <HiUser className="w-5 h-5" />
           <span>Profile</span>
         </Link>
+        <Link
+          to="/dashboard?tab=posts"
+          className="flex items-center gap-2 p-2 text-gray-700 rounded hover:bg-gray-100"
+        >
+          <HiUser className="w-5 h-5" />
+          <span>Posts</span>
+        </Link>
         <button
           className="flex items-center gap-2 p-2 text-red-600 rounded hover:bg-red-50"
           onClick={() => console.log("Sign out logic")}
