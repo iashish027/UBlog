@@ -15,15 +15,11 @@ import { useDispatch, useSelector } from "react-redux";
 import "flowbite";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import Logo from "./Logo";
+import HeaderAvatar from "./HeaderAvatar";
 export default function Header() {
   const path = useLocation().pathname;
-  const currentUser = useSelector((state) => state.user.currentUser);
   const currentTheme = useSelector((state) => state.theme);
   const dispatch = useDispatch();
-  // Get first letter of name or email
-  const userInitial = currentUser
-    ? (currentUser.username || currentUser.email || "U")[0].toUpperCase()
-    : null;
 
   return (
     <Navbar className="border-b-2">
@@ -59,24 +55,8 @@ export default function Header() {
             <FaSun className="text-white" />
           )}
         </Button>
-        {currentUser ? (
-          <Link to="/dashboard">
-            <Avatar
-              rounded
-              placeholderInitials={userInitial}
-              className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold flex items-center justify-center"
-            />
-          </Link>
-        ) : (
-          <Link to="/signin">
-            <Button
-              className="bg-gradient-to-r from-purple-500 to-blue-500"
-              outline
-            >
-              Sign in
-            </Button>
-          </Link>
-        )}
+        <HeaderAvatar />
+
         <NavbarToggle />
       </div>
       <NavbarCollapse>
