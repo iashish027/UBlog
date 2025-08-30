@@ -105,7 +105,6 @@ const signup = async (req, res, next) => {
         "succefully saved user, Verification mail sent to your email, please verify",
     });
   } catch (err) {
-    
     next(err);
   }
 };
@@ -148,12 +147,26 @@ const signin = async (req, res, next) => {
       .status(200)
       .cookie("access_token", token, {
         httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+        path: "/api",
       })
       .json(rest);
   } catch (err) {
     console.log(err);
     next(err);
   }
+};
+
+const signOut = (req, res, next) => {
+  console.log(req);
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    path: "/",
+  });
+  return res.status(200).json({ message: "Signed out successfully" });
 };
 
 // const google = async (req, res, next) =>{
@@ -169,4 +182,4 @@ const signin = async (req, res, next) => {
 //   }
 // }
 
-export { signin, signup };
+export { signin, signup, signOut };

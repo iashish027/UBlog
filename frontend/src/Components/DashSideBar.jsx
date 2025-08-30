@@ -1,7 +1,10 @@
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
 import { Link } from "react-router-dom";
-
+import signOut from "../utils/signOut";
+import { useDispatch } from "react-redux";
+import { signOutSuccess } from "../redux/user/userSlice";
 export default function DashSideBar() {
+  const dispatch = useDispatch();
   return (
     <div className="h-fit md:h-screen border-r shadow-md">
       <div className="p-4 font-bold text-xl border-b">Dashboard</div>
@@ -22,7 +25,7 @@ export default function DashSideBar() {
         </Link>
         <button
           className="flex items-center gap-2 p-2 text-red-600 rounded hover:bg-red-50"
-          onClick={() => console.log("Sign out logic")}
+          onClick={()=>dispatch(signOut())}
         >
           <HiArrowSmRight className="w-5 h-5" />
           <span>Sign Out</span>

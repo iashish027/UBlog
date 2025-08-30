@@ -66,7 +66,6 @@ export default function CreatePost() {
       navigate(`/post/getPost/${data.slug}`);
     } catch (error) {
       setPublishError("Something went wrong. Please try again.");
-      console.error(error);
     }
   };
 
@@ -88,7 +87,6 @@ export default function CreatePost() {
       setFormData({ ...formData, image: data.imageUrl });
     } catch (err) {
       setImageUploadError("Failed to upload cover image.");
-      console.error(err);
     }
   }
 
@@ -118,7 +116,6 @@ export default function CreatePost() {
         editor.insertEmbed(range.index, "image", data.imageUrl, "user");
       } catch (err) {
         setImageUploadError("Failed to upload image to Quill editor.");
-        console.error(err);
       }
     };
   }
@@ -230,7 +227,6 @@ export default function CreatePost() {
           formats={formats}
           onChange={(value) => {
             setFormData({ ...formData, content: value });
-            console.log(formData);
           }}
         />
         <Button

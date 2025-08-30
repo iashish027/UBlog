@@ -10,6 +10,7 @@ import Header from "./Components/Header";
 import FooterComponent from "./Components/FooterComponent";
 import PrivateRoute from "./Components/PrivateRoute.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
+import BlogShow from "./pages/BlogShow";
 function App() {
   return (
     <BrowserRouter>
@@ -20,12 +21,13 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/About" element={<About />} />
             <Route element={<PrivateRoute />}>
-            <Route path="/Dashboard" element={<Dashboard />} />
-            <Route path="/CreatePost" element={<CreatePost/>}/>
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/CreatePost" element={<CreatePost />} />
             </Route>
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/blog" element={<BlogShow />} />
           </Routes>
         </div>
         <FooterComponent />

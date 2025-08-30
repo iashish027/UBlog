@@ -12,7 +12,6 @@ export default function Dashboard() {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
     setTab(tabFromUrl);
-    console.log(tabFromUrl);
   }, [location.search]);
   return (
     <div className="md:min-h-screen flex md:flex-row  flex-col">
@@ -20,7 +19,7 @@ export default function Dashboard() {
         {/* sidebar */}
         <DashSideBar />
       </div>
-      <div clasName="flex-1">
+      <div className="flex-1">
         {/* profile... */}
         {tab == "profile" && <DashProfile />}
         {tab == "posts" && <UserPosts />}
