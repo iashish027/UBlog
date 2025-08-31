@@ -4,7 +4,6 @@ import { signOutSuccess } from "../redux/user/userSlice";
 const signOut = () => async (dispatch) => {
   try {
     await axios.post("/api/auth/signOut");
-    console.log("signout done");
     dispatch(signOutSuccess());
   } catch (error) {
     console.error("Sign out failed:", error);

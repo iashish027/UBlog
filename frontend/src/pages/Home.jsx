@@ -6,6 +6,7 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,8 +16,10 @@ export default function Home() {
         );
         setPosts(response.data.posts);
         setTotalPages(response.data.totalPages);
+        setError(null);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setError("Failed to fetch posts. Please try again later.");
       }
     };
 
@@ -25,6 +28,7 @@ export default function Home() {
 
   return (
     <div className="p-4">
+      {error && <div className="text-red-500 text-center mb-4">{error}</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {posts.map((post) => (
           <PostCard key={post._id} post={post} />

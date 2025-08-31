@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 // 3. Export a helper function
 export async function sendMail({ to, subject, text }) {
   if (!to || !text) {
-    console.log(to);
     throw new Error("Missing required fields: to + (text or html)");
   }
   const info = await transporter.sendMail({

@@ -39,7 +39,7 @@ export default function CreatePost() {
       userId: currentUser.id, // Use userId from Redux
       title: formData.title,
       content: formData.content,
-      coverImage: formData.image || undefined,
+      image: formData.image || undefined,
       category: formData.category || "uncategorized",
       slug,
       published: true,

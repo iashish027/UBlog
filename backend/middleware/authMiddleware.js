@@ -2,8 +2,6 @@ import jwt from "jsonwebtoken";
 
 // Middleware to protect routes
 export default (req, res, next) => {
-  // 1. Access the cookie
-  console.log(req);
   const token = req.cookies.access_token; // 'jwtToken' is the name of your cookie
 
   if (!token) {

@@ -14,8 +14,7 @@ function PostCard({ post }) {
       className="block border p-4 rounded shadow hover:shadow-lg transition"
     >
       <img src={post.image} alt="Post" className="mb-2" />
-      <h2 className="text-lg font-bold">{post.title}</h2>
-      <p className="text-sm text-gray-600 truncate">{post.content}</p>
+      <h2 className="text-[1.5rem] font-bold ">{post.title}</h2>
     </Link>
   );
 }

@@ -17,7 +17,6 @@ function hashToken(token) {
 }
 const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
-  console.log(req.body);
   if (
     !username ||
     !email ||
@@ -153,13 +152,10 @@ const signin = async (req, res, next) => {
       })
       .json(rest);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };
-
 const signOut = (req, res, next) => {
-  console.log(req);
   res.clearCookie("access_token", {
     httpOnly: true,
     secure: true,

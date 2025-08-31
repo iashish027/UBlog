@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 
 import multer from "multer";
-import {v2 as cloudinary} from "cloudinary";
-import path from 'path';
+import { v2 as cloudinary } from "cloudinary";
+import path from "path";
 
 dotenv.config();
 
@@ -47,10 +47,6 @@ export const uploadImage = async (req, res) => {
   const originalname = req.file.originalname;
   const mimetype = req.file.mimetype;
 
-  console.log(
-    `Received file in controller: ${originalname} (${mimetype}), size: ${fileBuffer.length} bytes`
-  );
-
   try {
     // Upload the image buffer to Cloudinary.
     const uploadResult = await new Promise((resolve, reject) => {
@@ -63,7 +59,6 @@ export const uploadImage = async (req, res) => {
           },
           (error, result) => {
             if (error) {
-              console.error("Cloudinary upload error:", error);
               reject(error);
             } else {
               resolve(result);
@@ -72,8 +67,6 @@ export const uploadImage = async (req, res) => {
         )
         .end(fileBuffer); // End the stream with the file buffer
     });
-
-    console.log("Cloudinary upload successful from controller:", uploadResult);
 
     // Send back the Cloudinary URL and other relevant information to the frontend
     res.status(200).json({
@@ -84,7 +77,6 @@ export const uploadImage = async (req, res) => {
       originalFileName: originalname,
     });
   } catch (error) {
-    console.error("Error during image upload process in controller:", error);
     // Handle other errors (e.g., Cloudinary API issues, network errors)
     res.status(500).json({
       success: false,
@@ -94,4 +86,4 @@ export const uploadImage = async (req, res) => {
   }
 };
 
-export const  uploadMiddleware = upload.single('image'); // Multer middleware configured for 'image' field
+export const uploadMiddleware = upload.single("image"); // Multer middleware configured for 'image' field

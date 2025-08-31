@@ -8,6 +8,7 @@ function UserPosts() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState(null);
   const currentUser = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
@@ -19,8 +20,10 @@ function UserPosts() {
           );
           setPosts(response.data.posts);
           setTotalPages(response.data.totalPages);
+          setError(null);
         } catch (error) {
           console.error("Error fetching posts:", error);
+          setError("Failed to fetch posts. Please try again later.");
         }
       }
     };
@@ -38,6 +41,7 @@ function UserPosts() {
           </button>
         </Link>
       </div>
+      {error && <div className="text-red-500 text-center mb-4">{error}</div>}
       <div className="gap-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {posts.map((post) => (
           <PostCard key={post._id} post={post} />
