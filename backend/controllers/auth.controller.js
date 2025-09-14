@@ -165,17 +165,6 @@ const signOut = (req, res, next) => {
   return res.status(200).json({ message: "Signed out successfully" });
 };
 
-// const google = async (req, res, next) =>{
-//   const {email, name , googlePhotoUrl, googleId} = req.body;
 
-//   try{
-//     const decoded = await getAuth().verifyIdToken(idToken);
-//     const user = await User.findOne({email});
-
-//     if(user){
-
-//     }
-//   }
-// }
 
 export { signin, signup, signOut };
