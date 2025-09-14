@@ -51,5 +51,5 @@ app.use((err, req, res, next) => {
   });
 });
 //start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {});
