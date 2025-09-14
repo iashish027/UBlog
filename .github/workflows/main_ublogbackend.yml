@@ -55,6 +55,22 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FE4F7D0F91CA46DE95D9CEE40F137A66 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7134942C09DE44A697166AFBEA51A0D2 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_058667E967FD4FAABEEA29866DA99717 }}
+      - name: Set Azure App Settings from GitHub Secrets
+        run: |
+          az webapp config appsettings set \
+            --name 'UblogBackend' \
+            --resource-group 'UblogApp' \
+            --settings \
+              MONGODB_URI="${{ secrets.MONGODB_URI }}" \
+              JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+              CLOUDINARY_CLOUD_NAME="${{ secrets.CLOUDINARY_CLOUD_NAME }}" \
+              CLOUDINARY_API_KEY="${{ secrets.CLOUDINARY_API_KEY }}" \
+              CLOUDINARY_API_SECRET="${{ secrets.CLOUDINARY_API_SECRET }}" \
+              SMTP_HOST="${{ secrets.SMTP_HOST }}" \
+              SMTP_PORT="${{ secrets.SMTP_PORT }}" \
+              SMTP_SECURE="${{ secrets.SMTP_SECURE }}" \
+              SMTP_USER="${{ secrets.SMTP_USER }}" \
+              SMTP_PASS="${{ secrets.SMTP_PASS }}" \
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -65,3 +81,4 @@ jobs:
           package: ./node-app
 
           
+
