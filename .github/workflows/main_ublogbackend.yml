@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: npm install, build, and test
+      - name: npm run test --if-present || echo "No tests, skipping"
         run: |
           cd ./backend
           npm install
@@ -81,4 +81,5 @@ jobs:
           package: ./node-app
 
           
+
 
