@@ -13,6 +13,7 @@ dotenv.config();
 const app = express();
 
 //connect to MongoDB
+if(process.env.MONGODB_URI)
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {})
