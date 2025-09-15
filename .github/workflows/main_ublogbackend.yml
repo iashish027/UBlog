@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: "20.x"
 
-      - name: Install and run backend
+      - name: backend setup and run
         run: |
           cd ./backend
           npm install
