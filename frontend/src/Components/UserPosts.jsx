@@ -16,7 +16,7 @@ function UserPosts() {
       if (currentUser) {
         try {
           const response = await axios.get(
-            `/api/posts/getposts?userId=${currentUser._id}&page=${page}&limit=9`
+            `/api/posts/getposts/dashboard?page=${page}&limit=9`
           );
           setPosts(response.data.posts);
           setTotalPages(response.data.totalPages);

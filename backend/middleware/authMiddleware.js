@@ -18,6 +18,7 @@ export default (req, res, next) => {
     // If verification is successful, 'user' will contain the payload
     // You can attach the user payload to the request object for later use in routes
     req.user = user; // e.g., req.user = { id: 'userId123', email: '...', roles: [...] }
+    console.log(user);
     next(); // Proceed to the next middleware or route handler
   });
 };

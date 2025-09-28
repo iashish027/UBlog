@@ -36,7 +36,6 @@ export default function CreatePost() {
       .substring(0, 50);
 
     const postPayload = {
-      userId: currentUser.id, // Use userId from Redux
       title: formData.title,
       content: formData.content,
       image: formData.image || undefined,

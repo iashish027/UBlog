@@ -3,18 +3,11 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcryptjs from "bcryptjs";
-import { getAuth } from "firebase-admin/auth";
-import { randomBytes, createHash } from "crypto";
-import { sendMail } from "../nodeMailer/mailer.js";
+import { makeVerificationToken, hashToken } from "../utils/token.js";
+import { sendVerificationMail } from "../services/mail.service.js";
 
 dotenv.config();
-function makeVerificationToken() {
-  return randomBytes(32).toString("hex"); // e.g. "f3a1…9c5b"
-}
 
-function hashToken(token) {
-  return createHash("sha256").update(token).digest("hex");
-}
 const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
   if (
@@ -25,7 +18,7 @@ const signup = async (req, res, next) => {
     email === "" ||
     password === ""
   ) {
-    return next(errorHandler(400, "all fields are required"));
+    return next(errorHandler(400, "All fields are required"));
   }
 
   try {
@@ -52,23 +45,21 @@ const signup = async (req, res, next) => {
             timestamps: true, // updates updatedAt if schema has timestamps
           }
         );
+
         // Send verification email with raw token
-        const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
-        const info = await sendMail({
-          to: existingUser.email,
-          subject: "Ublog account verification",
-          text: `Please verify your account by clicking the following link: ${verificationUrl}`,
-        });
-        if (!info.accepted) {
-          await User.deleteOne({ email });
-          return next(errorHandler(400, "unable to send verification code "));
-        } else {
-          res.status(200).json({
+        try{
+          sendVerificationMail(email,rawToken);
+
+          return res.status(200).json({
             success: true,
             statusCode: 200,
             message: "Verification mail sent to your email, please verify",
           });
         }
+        catch(err){
+          return next(errorHandler(400,"Unable to send verification code"));
+        }
+        
       }
       // else do as below
       return next(errorHandler(400, "Username or Email already exist"));
@@ -79,15 +70,13 @@ const signup = async (req, res, next) => {
     const tokenHash = hashToken(rawToken);
     const expiresInMinutes = 15;
     const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
-    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
-    const info = await sendMail({
-      to: email,
-      subject: "Ublog account verification",
-      text: `Please verify your account by clicking the following link: ${verificationUrl}`,
-    });
-    if (!info.accepted) {
-      return next(errorHandler(400, "unable to send verification code"));
+    try{
+      sendVerificationMail(email,rawToken);
     }
+    catch(err){
+      return res.send(errorHandler(400,"Unable to send verification code"));
+    }
+
     const newUser = new User({
       username,
       email,
@@ -96,35 +85,38 @@ const signup = async (req, res, next) => {
       verificationTokenExpires: expiresAt,
     });
 
-    await newUser.save();
+    const user = await newUser.save();
+
     return res.status(200).json({
       success: true,
       statusCode: 200,
       message:
-        "succefully saved user, Verification mail sent to your email, please verify",
+        "Verification mail sent to your email, please verify",
     });
   } catch (err) {
-    next(err);
+    next(errorHandler(500,"Internal Server error"));
   }
 };
+
+
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password || password === "" || password === "") {
-    return next(errorHandler(400, "all fields are required"));
+    return next(errorHandler(400, "All fields are required"));
   }
 
   try {
     const validUser = await User.findOne({ email });
 
     if (!validUser) {
-      return next(errorHandler(404, "email don't exists in our database"));
+      return next(errorHandler(404, "Email not found"));
     }
 
     //if user not verified tell to verify
     if (validUser.isVerified == false) {
       return next(
-        errorHandler(404, "email don't exists in our database or not verified")
+        errorHandler(404, "Email not found")
       );
     }
 
@@ -136,12 +128,20 @@ const signin = async (req, res, next) => {
 
     const token = jwt.sign(
       {
-        id: validUser._id,
+        userId: validUser._doc.userId,
+        username: validUser._doc.username,
+        email: validUser._doc.email,
       },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
     );
+    const { username: usernameExtracted, email: emailExtracted } = validUser._doc;
 
-    const { password: pass, ...rest } = validUser._doc;
+    const user = {
+      "username" : usernameExtracted,
+      "email" : emailExtracted
+    }
+
     res
       .status(200)
       .cookie("access_token", token, {
@@ -150,21 +150,30 @@ const signin = async (req, res, next) => {
         sameSite: "strict",
         path: "/api",
       })
-      .json(rest);
+      .json(user);
   } catch (err) {
     next(err);
   }
 };
+
+
 const signOut = (req, res, next) => {
-  res.clearCookie("access_token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    path: "/",
-  });
-  return res.status(200).json({ message: "Signed out successfully" });
+    try{
+      res.clearCookie("access_token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        path: "/",
+      });
+      return res.status(200).json({ message: "Signed out successfully" });
+    }
+    catch(err){
+      next(errorHandler(500,"Internal Server Error"));
+    }
 };
 
+const profile = (req, res, next) => {
 
+};
 
 export { signin, signup, signOut };
