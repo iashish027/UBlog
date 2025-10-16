@@ -2,30 +2,26 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import axios from "axios";
 import { setCurrentUser } from "../redux/user/userSlice";
+import { getUserProfile } from "../../services/api";
+import signOut from "../utils/signOut";
 
 export default function PrivateRoute() {
   const dispatch = useDispatch();
-  // useEffect(async ()=>{
-  //    const fetchProfile = async () => {
-  //      try {
-  //        const res = await fetch("/api/auth/Profile");
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const user = await getUserProfile();
+        dispatch(setCurrentUser(user));
+      } catch (err) {
+        console.error("Profile fetch failed:", err);
+        signOut();
+        dispatch(setCurrentUser(null));
+      }
+    };
 
-  //        if (res.ok) {
-  //          const data = await res.json(); // Don't forget to parse!
-  //          dispatch(setCurrentUser(data));
-  //        } else {
-  //          dispatch(setCurrentUser(null));
-  //        }
-  //      } catch (err) {
-  //        console.error("Profile fetch failed:", err);
-  //        dispatch(setCurrentUser(null));
-  //      }
-  //    };
-
-  //    fetchProfile();
-  // },[])
+    fetchProfile();
+  }, []);
   const currentUser = useSelector((state) => state.user.currentUser);
   const location = useLocation();
 

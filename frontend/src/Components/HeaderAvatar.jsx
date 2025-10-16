@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import { Avatar } from "flowbite-react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 

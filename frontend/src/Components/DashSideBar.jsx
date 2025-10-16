@@ -25,7 +25,7 @@ export default function DashSideBar() {
         </Link>
         <button
           className="flex items-center gap-2 p-2 text-red-600 rounded hover:bg-red-50"
-          onClick={()=>dispatch(signOut())}
+          onClick={() => dispatch(signOut())}
         >
           <HiArrowSmRight className="w-5 h-5" />
           <span>Sign Out</span>

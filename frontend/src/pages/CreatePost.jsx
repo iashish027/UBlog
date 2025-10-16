@@ -7,6 +7,7 @@ import { useState, useRef, useMemo } from "react"; // Add useRef
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
+import { createPost } from "../../services/api";
 
 export default function CreatePost() {
   const quillRef = useRef(null); // Ref for ReactQuill editor instance
@@ -15,9 +16,10 @@ export default function CreatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
+  const [publishSuccess, setPublishSuccess] = useState(null);
 
-  const currentUser = useSelector((state) => state.user.currentUser);
-  const navigate = useNavigate();
+  // const currentUser = useSelector((state) => state.user.currentUser);
+  // const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,26 +47,13 @@ export default function CreatePost() {
     };
 
     try {
-      const res = await fetch("/api/posts/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(postPayload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setPublishError(data.message || "Failed to publish post.");
-        return;
-      }
-
+      const res = await createPost(postPayload);
       // Redirect to the post page after successful creation
       setPublishError(null);
-      navigate(`/post/getPost/${data.slug}`);
+      setPublishSuccess("Post Created Succesfully");
     } catch (error) {
-      setPublishError("Something went wrong. Please try again.");
+      console.log(error);
+      setPublishError(error.message);
     }
   };
 
@@ -154,7 +143,6 @@ export default function CreatePost() {
       "indent",
       "link",
       "image",
-      "video",
       "clean",
     ],
     [] // No dependencies, so it's created only once
@@ -164,11 +152,9 @@ export default function CreatePost() {
   return (
     <div className="p-3 max-w-5xl mx-auto min-h-screen">
       {" "}
-      {/* Increased max width for larger screens */}
       <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         {" "}
-        {/* Increased gap for better spacing */}
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -181,6 +167,7 @@ export default function CreatePost() {
             }
           />
         </div>
+
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
           <FileInput
             type="file"
@@ -207,7 +194,9 @@ export default function CreatePost() {
             )}
           </Button>
         </div>
+
         {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
+
         {formData.image && (
           <img
             src={formData.image}
@@ -215,6 +204,7 @@ export default function CreatePost() {
             className="w-full h-72 object-cover rounded-lg" // Added rounded corners
           />
         )}
+
         <ReactQuill
           ref={quillRef}
           theme="snow"
@@ -228,6 +218,7 @@ export default function CreatePost() {
             setFormData({ ...formData, content: value });
           }}
         />
+
         <Button
           type="submit"
           className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
@@ -235,11 +226,15 @@ export default function CreatePost() {
         >
           Publish
         </Button>
+
         {publishError && (
           <Alert className="mt-5" color="failure">
             {publishError}
           </Alert>
         )}
+
+
+
       </form>
     </div>
   );

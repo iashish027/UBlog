@@ -2,6 +2,7 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../Components/Logo";
+import { signUp } from "../../services/api";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -32,13 +33,7 @@ export default function SignUp() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
+      const data = await signUp(formData); //making signIn api call
 
       if (data.success === false) {
         setError(data.message);
@@ -122,5 +117,3 @@ export default function SignUp() {
     </div>
   );
 }
-
-

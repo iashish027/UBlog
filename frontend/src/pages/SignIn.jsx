@@ -8,6 +8,7 @@ import {
 } from "../redux/user/userSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../Components/Logo.jsx";
+import { signIn } from "../../services/api.js";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -26,20 +27,14 @@ export default function SignIn() {
     }
     try {
       dispatch(signInStart());
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
+      const data = await signIn(formData); //making signIn api call
+
       if (data.success === false) {
         return dispatch(signInFailure(data.message));
       }
 
-      if (res.ok) {
-        dispatch(signInSuccess(data));
-        navigate("/");
-      }
+      dispatch(signInSuccess(data));
+      navigate("/");
     } catch (error) {
       dispatch(signInFailure());
     }
@@ -58,9 +53,9 @@ export default function SignIn() {
         {/* right */}
         <div className="flex-1">
           <form>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email"> Email </Label>
             <TextInput type="email" id="email" onChange={handleChange} />
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password"> Password </Label>
             <TextInput type="password" id="password" onChange={handleChange} />
             <Button
               className="bg-gradient-to-r from-indigo-500 via-puple-500 to-pink-500 mt-2"
@@ -77,12 +72,14 @@ export default function SignIn() {
               )}
             </Button>
           </form>
+
           <div>
             <span>Have an account? </span>
             <Link to="/signup" className="text-blue-500 ">
               Sign Up
             </Link>
           </div>
+
           {errorMessage && (
             <Alert className="mt-5" color="failure">
               {errorMessage}

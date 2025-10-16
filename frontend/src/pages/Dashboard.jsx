@@ -16,11 +16,11 @@ export default function Dashboard() {
   return (
     <div className="md:min-h-screen flex md:flex-row  flex-col">
       <div className="w-full md:w-[20rem] border-2 flex-none">
-        {/* sidebar */}
+        {/* Left sidebar */}
         <DashSideBar />
       </div>
+        {/* Right area for content */}
       <div className="flex-1">
-        {/* profile... */}
         {tab == "profile" && <DashProfile />}
         {tab == "posts" && <UserPosts />}
       </div>

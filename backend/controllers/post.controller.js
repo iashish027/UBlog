@@ -19,7 +19,7 @@ export const createPost = async (req, res, next) => {
 
     const savedPost = await newPost.save();
 
-    res.status(201).json(savedPost);
+    res.status(201).send();
   } catch (error) {
     next(error);
   }
@@ -28,7 +28,7 @@ export const createPost = async (req, res, next) => {
 export const getPosts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 9;
     const skip = (page - 1) * limit;
     const sortDirection = req.query.order === "asc" ? 1 : -1;
 
@@ -53,7 +53,7 @@ export const getPosts = async (req, res, next) => {
 export const getMyPosts = async (req,res,next)=>{
     try {
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 20;
+      const limit = parseInt(req.query.limit) || 9;
       const skip = (page - 1) * limit;
       const sortDirection = req.query.order === "asc" ? 1 : -1;
       const userId = req.user.userId;

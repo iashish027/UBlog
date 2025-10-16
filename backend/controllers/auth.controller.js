@@ -47,19 +47,17 @@ const signup = async (req, res, next) => {
         );
 
         // Send verification email with raw token
-        try{
-          sendVerificationMail(email,rawToken);
+        try {
+          sendVerificationMail(email, rawToken);
 
           return res.status(200).json({
             success: true,
             statusCode: 200,
             message: "Verification mail sent to your email, please verify",
           });
+        } catch (err) {
+          return next(errorHandler(400, "Unable to send verification code"));
         }
-        catch(err){
-          return next(errorHandler(400,"Unable to send verification code"));
-        }
-        
       }
       // else do as below
       return next(errorHandler(400, "Username or Email already exist"));
@@ -70,11 +68,10 @@ const signup = async (req, res, next) => {
     const tokenHash = hashToken(rawToken);
     const expiresInMinutes = 15;
     const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
-    try{
-      sendVerificationMail(email,rawToken);
-    }
-    catch(err){
-      return res.send(errorHandler(400,"Unable to send verification code"));
+    try {
+      sendVerificationMail(email, rawToken);
+    } catch (err) {
+      return res.send(errorHandler(400, "Unable to send verification code"));
     }
 
     const newUser = new User({
@@ -90,14 +87,12 @@ const signup = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       statusCode: 200,
-      message:
-        "Verification mail sent to your email, please verify",
+      message: "Verification mail sent to your email, please verify",
     });
   } catch (err) {
-    next(errorHandler(500,"Internal Server error"));
+    next(errorHandler(500, "Internal Server error"));
   }
 };
-
 
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -115,9 +110,7 @@ const signin = async (req, res, next) => {
 
     //if user not verified tell to verify
     if (validUser.isVerified == false) {
-      return next(
-        errorHandler(404, "Email not found")
-      );
+      return next(errorHandler(404, "Email not found"));
     }
 
     const validPassword = bcryptjs.compareSync(password, validUser.password);
@@ -135,12 +128,13 @@ const signin = async (req, res, next) => {
       process.env.JWT_SECRET,
       { expiresIn: "15m" }
     );
-    const { username: usernameExtracted, email: emailExtracted } = validUser._doc;
+    const { username: usernameExtracted, email: emailExtracted } =
+      validUser._doc;
 
     const user = {
-      "username" : usernameExtracted,
-      "email" : emailExtracted
-    }
+      username: usernameExtracted,
+      email: emailExtracted,
+    };
 
     res
       .status(200)
@@ -156,24 +150,28 @@ const signin = async (req, res, next) => {
   }
 };
 
-
 const signOut = (req, res, next) => {
-    try{
-      res.clearCookie("access_token", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        path: "/",
-      });
-      return res.status(200).json({ message: "Signed out successfully" });
-    }
-    catch(err){
-      next(errorHandler(500,"Internal Server Error"));
-    }
+  try {
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      path: "/",
+    });
+    return res.status(200).json({ message: "Signed out successfully" });
+  } catch (err) {
+    next(errorHandler(500, "Internal Server Error"));
+  }
 };
 
 const profile = (req, res, next) => {
-
+  try {
+    res
+      .status(200)
+      .json({ username: req.user?.username, email: req.user?.email });
+  } catch {
+    res.status(500).json({ message: "Internal Servere Error" });
+  }
 };
 
-export { signin, signup, signOut };
+export { signin, signup, signOut, profile };

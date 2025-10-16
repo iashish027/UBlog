@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import PostCard from "../Components/PostCard";
+import { getPosts } from "../../services/api";
+import PageNavButtons from "../Components/PageNavButtons";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -11,11 +12,9 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(
-          `/api/posts/getposts?page=${page}&limit=20`
-        );
-        setPosts(response.data.posts);
-        setTotalPages(response.data.totalPages);
+        const data = await getPosts(page);
+        setPosts(data.posts);
+        setTotalPages(data.totalPages);
         setError(null);
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -34,25 +33,7 @@ export default function Home() {
           <PostCard key={post._id} post={post} />
         ))}
       </div>
-      <div className="flex justify-center mt-4 items-center">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          className="px-4 py-2 bg-gray-300 rounded mr-2"
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span className="mx-2">
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          className="px-4 py-2 bg-gray-300 rounded"
-          disabled={page === totalPages}
-        >
-          Next
-        </button>
-      </div>
+      <PageNavButtons page = {page} totalPages = {totalPages} setPage = {setPage}/>
     </div>
   );
 }

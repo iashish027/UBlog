@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Button,
@@ -7,7 +6,6 @@ import {
   NavbarCollapse,
   NavbarLink,
   NavbarToggle,
-  Avatar,
 } from "flowbite-react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -40,24 +38,27 @@ export default function Header() {
           }}
         />
       </form>
+
       <Button className="w-12 h-10 lg:hidden bg-gray-100" pill>
         <AiOutlineSearch className="text-black" />
       </Button>
+
       <div className="flex gap-2 items-center justify-end md:order-2">
         <Button
           className="w-12 h-10 hidden sm:inline dark:bg-gray-100 bg-[rgb(16,23,42)]"
           onClick={() => dispatch(toggleTheme())}
           pill
         >
-          {currentTheme.theme === "dark" ? (
-            <FaMoon className="text-black" />
-          ) : (
-            <FaSun className="text-white" />
-          )}
+            {currentTheme.theme === "dark" ? (
+              <FaMoon className="text-black" />
+            ) : (
+              <FaSun className="text-white" />
+            )}
         </Button>
-        <HeaderAvatar />
 
+        <HeaderAvatar />
         <NavbarToggle />
+
       </div>
       <NavbarCollapse>
         <NavbarLink
