@@ -1,148 +1,35 @@
-import User from "../user/User.model.js";
 import { errorHandler } from "../../utils/error.js";
-import jwt from "jsonwebtoken";
-import bcryptjs from "bcryptjs";
-import { makeVerificationToken, hashToken } from "../../utils/token.js";
-import { sendVerificationMail } from "../../services/mail/mail.service.js";
-import { env } from "../../config/index.js"
+import { signupService, signinService, verifyEmailService } from "./auth.service.js";
 
 const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
-  if (
-    !username ||
-    !email ||
-    !password ||
-    username === "" ||
-    email === "" ||
-    password === ""
-  ) {
-    return next(errorHandler(400, "All fields are required"));
-  }
 
   try {
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-
-    if (existingUser) {
-      // if verified: false and token time < current time delete user
-      if (existingUser.isVerified == false) {
-        const rawToken = makeVerificationToken();
-        const tokenHash = hashToken(rawToken);
-        const expiresInMinutes = 15;
-        const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
-        const updatedUser = await User.findOneAndUpdate(
-          { email: existingUser.email },
-          {
-            $set: {
-              verificationToken: tokenHash,
-              verificationTokenExpires: expiresAt,
-            },
-          },
-          {
-            new: true, // return the *updated* doc
-            runValidators: true, // apply schema validators
-            timestamps: true, // updates updatedAt if schema has timestamps
-          }
-        );
-
-        // Send verification email with raw token
-        try {
-          sendVerificationMail(email, username, rawToken);
-
-          return res.status(200).json({
-            success: true,
-            statusCode: 200,
-            message: "Verification mail sent to your email, please verify",
-          });
-        } catch (err) {
-          return next(errorHandler(400, "Unable to send verification code"));
-        }
-      }
-      // else do as below
-      return next(errorHandler(400, "Username or Email already exist"));
-    }
-
-    const hashedPassword = await bcryptjs.hash(password, 10);
-    const rawToken = makeVerificationToken();
-    const tokenHash = hashToken(rawToken);
-    const expiresInMinutes = 15;
-    const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
-    try {
-      sendVerificationMail(email, username, rawToken);
-    } catch (err) {
-      return res.send(errorHandler(400, "Unable to send verification code"));
-    }
-
-    const newUser = new User({
-      username,
-      email,
-      password: hashedPassword,
-      verificationToken: tokenHash,
-      verificationTokenExpires: expiresAt,
-    });
-
-    const user = await newUser.save();
-
+    const result = await signupService(username, email, password);
     return res.status(200).json({
-      success: true,
+      success: result.success,
       statusCode: 200,
-      message: "Verification mail sent to your email, please verify",
+      message: result.message,
     });
   } catch (err) {
-    next(errorHandler(500, "Internal Server error"));
+    next(err);
   }
 };
 
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password || password === "" || password === "") {
-    return next(errorHandler(400, "All fields are required"));
-  }
-
   try {
-    const validUser = await User.findOne({ email });
-
-    if (!validUser) {
-      return next(errorHandler(404, "Email not found"));
-    }
-
-    //if user not verified tell to verify
-    if (validUser.isVerified == false) {
-      return next(errorHandler(404, "Email not found"));
-    }
-
-    const validPassword = bcryptjs.compareSync(password, validUser.password);
-
-    if (!validPassword) {
-      return next(errorHandler(404, "password is wrong"));
-    }
-
-    const token = jwt.sign(
-      {
-        userId: validUser._doc.userId,
-        username: validUser._doc.username,
-        email: validUser._doc.email,
-      },
-      env.JWT_SECRET,
-      { expiresIn: "15m" }
-    );
-    const { username: usernameExtracted, email: emailExtracted } =
-      validUser._doc;
-
-    const user = {
-      username: usernameExtracted,
-      email: emailExtracted,
-    };
-
+    const result = await signinService(email, password);
     res
       .status(200)
-      .cookie("access_token", token, {
+      .cookie("access_token", result.token, {
         httpOnly: true,
         secure: false,
         sameSite: "strict",
         path: "/api",
       })
-      .json(user);
+      .json({ username: result.username, email: result.email });
   } catch (err) {
     next(err);
   }
@@ -175,33 +62,11 @@ const profile = (req, res, next) => {
 const verifyEmail = async (req, res, next) => {
   const { username, token } = req.body;
 
-  if (!username || !token) {
-    return next(
-      errorHandler(400, "Username and verification token are required.")
-    );
-  }
-
   try {
-    const tokenHash = createHash("sha256").update(token).digest("hex");
-
-    const user = await User.findOne({
-      username,
-      verificationToken: tokenHash,
-      verificationTokenExpires: { $gt: Date.now() },
-    });
-
-    if (!user) {
-      return next(errorHandler(400, "Invalid or expired verification token."));
-    }
-
-    user.isVerified = true;
-    user.verificationToken = undefined;
-    user.verificationTokenExpires = undefined;
-    await user.save();
-
-    return res.status(200).json({ message: "Email verified successfully." });
+    const result = await verifyEmailService(username, token);
+    return res.status(200).json(result);
   } catch (err) {
-    next(errorHandler(500, "Server error."));
+    next(err);
   }
 };
 

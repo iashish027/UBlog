@@ -9,7 +9,6 @@ import {
 } from "./post.controller.js";
 import authenticateToken from "../../middleware/authMiddleware.js";
 import { upload } from "../../services/media/images/multer.config.js"
-// import { uploadImage } from "../../services/media/images/upload.service.js";
 const router = express.Router();
 
 router.post("/create", authenticateToken, createPost);
