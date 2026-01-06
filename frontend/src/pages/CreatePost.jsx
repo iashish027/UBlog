@@ -67,7 +67,7 @@ export default function CreatePost() {
     form.append("image", file);
 
     try {
-      const res = await fetch("/api/images/upload", {
+      const res = await fetch("/api/posts/coverImageUpload", {
         method: "POST",
         body: form,
       });
@@ -94,7 +94,7 @@ export default function CreatePost() {
       form.append("image", selectedFile);
 
       try {
-        const res = await fetch("/api/images/upload", {
+        const res = await fetch("/api/post/imageUpload", {
           method: "POST",
           body: form,
         });

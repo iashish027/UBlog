@@ -12,6 +12,10 @@ function UserPosts() {
   const [error, setError] = useState(null);
   const currentUser = useSelector((state) => state.user.currentUser);
 
+  const handleDelete = (postId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       if (currentUser) {
@@ -32,7 +36,7 @@ function UserPosts() {
   }, [currentUser, page]);
 
   return (
-    <div className="p-3"> 
+    <div className="p-3">
       {/* Upper part - Posts heading , Create Post button */}
       <div className="text-center mb-4">
         <h1 className="text-2xl font-bold">Posts</h1>
@@ -42,7 +46,6 @@ function UserPosts() {
             Create Post
           </button>
         </Link>
-
       </div>
 
       {/* Bottom part User Post cards  */}
@@ -50,10 +53,10 @@ function UserPosts() {
 
       <div className="gap-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {posts.map((post) => (
-          <PostCard key={post._id} post={post} />
+          <PostCard key={post._id} post={post} onDelete={handleDelete} />
         ))}
       </div>
-      
+
       {/* Page Navigation buttons */}
       <div className="flex justify-center mt-4 items-center">
         <button
@@ -75,7 +78,6 @@ function UserPosts() {
           Next
         </button>
       </div>
-
     </div>
   );
 }

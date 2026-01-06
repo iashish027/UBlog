@@ -8,7 +8,7 @@ export default function PageNavButtons(props) {
     <div className="flex justify-center mt-4 items-center">
       <button
         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        className="px-4 py-2 bg-gray-300 rounded mr-2"
+        className="px-4 py-2rounded mr-2"
         disabled={page === 1}
       >
         Previous
@@ -18,7 +18,7 @@ export default function PageNavButtons(props) {
       </span>
       <button
         onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-        className="px-4 py-2 bg-gray-300 rounded"
+        className="px-4 py-2 rounded"
         disabled={page === totalPages}
       >
         Next
