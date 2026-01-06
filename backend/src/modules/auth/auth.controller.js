@@ -1,12 +1,10 @@
-import User from "../models/User.model.js";
-import { errorHandler } from "../utils/error.js";
+import User from "../user/User.model.js";
+import { errorHandler } from "../../utils/error.js";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import bcryptjs from "bcryptjs";
-import { makeVerificationToken, hashToken } from "../utils/token.js";
-import { sendVerificationMail } from "../services/mail.service.js";
-
-dotenv.config();
+import { makeVerificationToken, hashToken } from "../../utils/token.js";
+import { sendVerificationMail } from "../../services/mail/mail.service.js";
+import { env } from "../../config/index.js"
 
 const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -48,7 +46,7 @@ const signup = async (req, res, next) => {
 
         // Send verification email with raw token
         try {
-          sendVerificationMail(email, rawToken);
+          sendVerificationMail(email, username, rawToken);
 
           return res.status(200).json({
             success: true,
@@ -69,7 +67,7 @@ const signup = async (req, res, next) => {
     const expiresInMinutes = 15;
     const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
     try {
-      sendVerificationMail(email, rawToken);
+      sendVerificationMail(email, username, rawToken);
     } catch (err) {
       return res.send(errorHandler(400, "Unable to send verification code"));
     }
@@ -125,7 +123,7 @@ const signin = async (req, res, next) => {
         username: validUser._doc.username,
         email: validUser._doc.email,
       },
-      process.env.JWT_SECRET,
+      env.JWT_SECRET,
       { expiresIn: "15m" }
     );
     const { username: usernameExtracted, email: emailExtracted } =
@@ -174,4 +172,38 @@ const profile = (req, res, next) => {
   }
 };
 
-export { signin, signup, signOut, profile };
+const verifyEmail = async (req, res, next) => {
+  const { username, token } = req.body;
+
+  if (!username || !token) {
+    return next(
+      errorHandler(400, "Username and verification token are required.")
+    );
+  }
+
+  try {
+    const tokenHash = createHash("sha256").update(token).digest("hex");
+
+    const user = await User.findOne({
+      username,
+      verificationToken: tokenHash,
+      verificationTokenExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return next(errorHandler(400, "Invalid or expired verification token."));
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpires = undefined;
+    await user.save();
+
+    return res.status(200).json({ message: "Email verified successfully." });
+  } catch (err) {
+    next(errorHandler(500, "Server error."));
+  }
+};
+
+
+export { signin, signup, signOut, profile, verifyEmail };

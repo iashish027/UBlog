@@ -1,58 +1,27 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors";
-import cookieParser from "cookie-parser";
+import { app } from "./app.js";
+import { connectDB, getDbStatus } from "./src/config/db.js";
+import { env } from "./src/config/env.js";
 
-// import userRoutes from "./routes/user.route.js";
-import postRoutes from "./routes/post.route.js";
-import authRoutes from "./routes/auth.route.js";
-import verifyEmailRoutes from "./routes/verify-email.route.js";
-import imageRoutes from "./routes/imageUpload.route.js";
-dotenv.config();
-const app = express();
 
-//connect to MongoDB
-if (process.env.MONGODB_URI)
-  mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => {})
-    .catch((err) => console.error("MongoDB connection error : ", err));
+const startServer = () =>{
+  //connect to MongoDB
+  try{
+    
+    connectDB();
 
-//Routes
-app.use((req, res, next) => {
-  res.setHeader(
-    "Cache-Control",
-    "no-store, no-cache, must-revalidate, proxy-revalidate"
-  );
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-  res.setHeader("Surrogate-Control", "no-store");
-  next();
-});
-app.use(express.json());
-app.use(cookieParser());
-// app.use("/api/user", userRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/verify-email", verifyEmailRoutes);
-app.use("/api/images", imageRoutes);
+    //start the server
+    const PORT = env.PORT;
+    app.listen(PORT, () => {
+      console.log("Server is running at port ", PORT);
+    });
+  }
+  catch(err){
+    console.log(err);
+    process.exit(1);
+  }
+};
 
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: "Route not found" });
-});
+startServer();
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal server error";
-  return res.status(statusCode).json({
-    success: false,
-    statusCode,
-    message,
-  });
-});
-//start the server
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log("Server is running at port ", PORT);
-});
+
+

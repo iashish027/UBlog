@@ -1,17 +1,15 @@
 // mailer.js
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-dotenv.config();
+import {env} from "../../config/index.js"
 
 // 1. Configure the transporter once
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: process.env.SMTP_SECURE === "true",
+  host: env.SMTP_HOST,
+  port: Number(env.SMTP_PORT),
+  secure: env.SMTP_SECURE === "true",
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: env.SMTP_USER,
+    pass: env.SMTP_PASS,
   },
 });
 
@@ -21,7 +19,7 @@ export async function sendMail({ to, subject, text }) {
     throw new Error("Missing required fields: to + (text or html)");
   }
   const info = await transporter.sendMail({
-    from: `"My App" <${process.env.SMTP_USER}>`,
+    from: `"My App" <${env.SMTP_USER}>`,
     to,
     subject,
     text,

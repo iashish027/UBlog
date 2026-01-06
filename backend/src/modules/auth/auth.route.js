@@ -4,13 +4,15 @@ import {
   signin,
   signOut,
   profile,
-} from "../controllers/auth.controller.js";
-import authenticateToken from "../middleware/authMiddleware.js";
+  verifyEmail,
+} from "./auth.controller.js";
+import authenticateToken from "../../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get("/profile", authenticateToken, profile);
 router.post("/signup", signup);
 router.post("/signin", signin);
 router.post("/signOut", signOut);
+router.post("/verify-email",verifyEmail)
 // router.post("/google", googleAuth);
 export default router;

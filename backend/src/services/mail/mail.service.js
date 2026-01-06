@@ -1,7 +1,7 @@
-import { sendMail } from "../nodeMailer/mailer.js";
-
-export const sendVerificationMail = async (email, token) => {
-  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
+import { sendMail } from "./mailer.js";
+import { env } from "../../config/index.js"
+export const sendVerificationMail = async (email, username, token) => {
+  const verificationUrl = `${env.FRONTEND_URL}/verify-email?username=${username}&token=${token}`;
   const info = await sendMail({
     to: email,
     subject: "Ublog account verification",
