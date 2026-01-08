@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import PostCard from "../Components/PostCard";
-import { getPosts } from "../../services/api";
-import PageNavButtons from "../Components/PageNavButtons";
+import PostCard from "../features/post/PostCard";
+import { getPosts } from "../services/api";
+import PageNavButtons from "../Components/Common/PageNavButtons";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);

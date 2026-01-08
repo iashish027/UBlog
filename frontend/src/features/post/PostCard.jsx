@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import { deletePost } from "../../services/api";
 
 function PostCard({ post, onDelete }) {
   const location = useLocation();
@@ -9,10 +9,7 @@ function PostCard({ post, onDelete }) {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/api/posts/deletepost`, {
-        data: { postId: post._id },
-        withCredentials: true,
-      });
+      await deletePost(post._id);
       if (onDelete) onDelete(post._id);
     } catch (error) {
       console.error("Error deleting post:", error);

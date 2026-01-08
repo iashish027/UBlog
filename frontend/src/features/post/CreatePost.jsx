@@ -7,7 +7,7 @@ import { useState, useRef, useMemo } from "react"; // Add useRef
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
-import { createPost } from "../../services/api";
+import { createPost, uploadCoverImage, uploadImage } from "../../services/api";
 
 export default function CreatePost() {
   const quillRef = useRef(null); // Ref for ReactQuill editor instance
@@ -67,11 +67,7 @@ export default function CreatePost() {
     form.append("image", file);
 
     try {
-      const res = await fetch("/api/posts/coverImageUpload", {
-        method: "POST",
-        body: form,
-      });
-      const data = await res.json();
+      const data = await uploadCoverImage(form);
       setFormData({ ...formData, image: data.imageUrl });
     } catch (err) {
       setImageUploadError("Failed to upload cover image.");
@@ -94,11 +90,7 @@ export default function CreatePost() {
       form.append("image", selectedFile);
 
       try {
-        const res = await fetch("/api/posts/imageUpload", {
-          method: "POST",
-          body: form,
-        });
-        const data = await res.json();
+        const data = await uploadImage(form);
         const editor = quillRef.current.getEditor();
         const range = editor.getSelection();
         editor.insertEmbed(range.index, "image", data.imageUrl, "user");

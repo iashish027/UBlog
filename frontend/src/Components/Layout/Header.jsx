@@ -11,7 +11,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import "flowbite";
-import { toggleTheme } from "../redux/theme/themeSlice";
+import { toggleTheme } from "../../features/theme/themeSlice";
 import Logo from "./Logo";
 import HeaderAvatar from "./HeaderAvatar";
 export default function Header() {

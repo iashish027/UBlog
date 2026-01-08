@@ -1,4 +1,4 @@
-import React from "react";
+import DOMPurify from "dompurify";
 import { useLocation } from "react-router-dom";
 
 export default function BlogShow() {
@@ -14,7 +14,7 @@ export default function BlogShow() {
         </p>
         <div
           className="prose max-w-none mx-auto"
-          dangerouslySetInnerHTML={{ __html: content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content), }}
         ></div>
       </div>
     </div>

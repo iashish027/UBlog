@@ -4,11 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   signInStart,
   signInSuccess,
-  signInFailure,
-} from "../redux/user/userSlice.js";
+  signInFailure } from "./userSlice.js";
 import { useDispatch, useSelector } from "react-redux";
-import Logo from "../Components/Logo.jsx";
+import Logo from "../../Components/Layout/Logo.jsx";
 import { signIn } from "../../services/api.js";
+import { fromJSON } from "postcss";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -36,7 +36,7 @@ export default function SignIn() {
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      dispatch(signInFailure());
+      dispatch(signInFailure(error.message || "Sign in failed"));
     }
   };
   return (

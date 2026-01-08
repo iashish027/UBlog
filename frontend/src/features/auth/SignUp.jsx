@@ -1,7 +1,7 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../Components/Logo";
+import Logo from "../../Components/Layout/Logo";
 import { signUp } from "../../services/api";
 
 export default function SignUp() {

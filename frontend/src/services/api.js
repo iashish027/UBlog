@@ -2,12 +2,14 @@
 // const API_BASE = ""; <- this will be handled by proxy
 
 async function request(endpoint, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  if (!(options.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
+
   const response = await fetch(`${endpoint}`, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+    headers,
     credentials: "include", // for cookies
   });
 
@@ -66,5 +68,39 @@ export function signUp(formData) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
+  });
+}
+
+export function verifyEmail(data) {
+  return request("/api/auth/verify-email", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export function uploadCoverImage(formData) {
+  return request("/api/posts/coverImageUpload", {
+    method: "POST",
+    body: formData,
+  });
+}
+
+export function uploadImage(formData) {
+  return request("/api/posts/imageUpload", {
+    method: "POST",
+    body: formData,
+  });
+}
+
+export function deletePost(postId) {
+  return request("/api/posts/deletepost", {
+    method: "DELETE",
+    body: JSON.stringify({ postId }),
+  });
+}
+
+export function signOutUser() {
+  return request("/api/auth/signOut", {
+    method: "POST",
   });
 }

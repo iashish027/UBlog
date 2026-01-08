@@ -1,9 +1,9 @@
-import axios from "axios";
-import { signOutSuccess } from "../redux/user/userSlice";
+import { signOutUser } from "../../services/api";
+import { signOutSuccess } from "./userSlice";
 
 const signOut = () => async (dispatch) => {
   try {
-    await axios.post("/api/auth/signOut");
+    await signOutUser();
     dispatch(signOutSuccess());
   } catch (error) {
     console.error("Sign out failed:", error);

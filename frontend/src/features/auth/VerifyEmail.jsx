@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Alert, Spinner, Button } from "flowbite-react";
+import { verifyEmail } from "../../services/api";
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -17,25 +18,12 @@ export default function VerifyEmail() {
     }
     const verify = async () => {
       try {
-        const res = await fetch("/api/auth/verify-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            token,
-            username
-          }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          setStatus("success");
-          setMessage(data.message || "Email verified successfully!");
-        } else {
-          setStatus("error");
-          setMessage(data.message || "Verification failed.");
-        }
-      } catch {
+        const data = await verifyEmail({ token, username });
+        setStatus("success");
+        setMessage(data.message || "Email verified successfully!");
+      } catch (error) {
         setStatus("error");
-        setMessage("Server error. Please try again later.");
+        setMessage(error.message || "Verification failed.");
       }
     };
     verify();

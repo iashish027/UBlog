@@ -1,8 +1,7 @@
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import signOut from "../utils/signOut";
+import signOut from "../auth/signOut";
 import { useDispatch } from "react-redux";
-import { signOutSuccess } from "../redux/user/userSlice";
 export default function DashSideBar() {
   const dispatch = useDispatch();
   return (
