@@ -45,7 +45,7 @@ const signupService = async (username, email, password) => {
         await sendVerificationMail(email, username, rawToken);
         return { success: true, message: "Verification mail sent to your email, please verify" };
       } catch (err) {
-        throw errorHandler(400, "Unable to send verification code");
+        throw errorHandler(400, err || "Unable to send verification code");
       }
     }
     throw errorHandler(400, "Username or Email already exist");
@@ -60,7 +60,7 @@ const signupService = async (username, email, password) => {
   try {
     await sendVerificationMail(email, username, rawToken);
   } catch (err) {
-    throw errorHandler(400, "Unable to send verification code");
+    throw errorHandler(400, err || "Unable to send verification code");
   }
 
   const newUser = new User({

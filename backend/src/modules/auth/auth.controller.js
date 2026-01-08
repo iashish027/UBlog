@@ -5,6 +5,7 @@ const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
   try {
+    console.log(username,email,password);
     const result = await signupService(username, email, password);
     return res.status(200).json({
       success: result.success,
