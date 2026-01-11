@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { setCurrentUser } from "./userSlice";
-import { getUserProfile } from "../../services/api";
-import signOut from "./signOut";
+import { setCurrentUser } from "../features/auth/userSlice";
+import { getUserProfile } from "../services/api";
+import signOut from "../features/auth/signOut";
 
 export default function AuthInitializer({ children }) {
   const dispatch = useDispatch();

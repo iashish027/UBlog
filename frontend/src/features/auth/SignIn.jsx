@@ -32,7 +32,7 @@ export default function SignIn() {
       if (data.success === false) {
         return dispatch(signInFailure(data.message));
       }
-      console.log("success");
+      
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {

@@ -52,7 +52,6 @@ export default function CreatePost() {
       setPublishError(null);
       setPublishSuccess("Post Created Succesfully");
     } catch (error) {
-      console.log(error);
       setPublishError(error.message);
     }
   };

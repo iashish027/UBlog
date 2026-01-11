@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import PostCard from "../features/post/PostCard";
-import { getPosts } from "../services/api";
-import PageNavButtons from "../Components/Common/PageNavButtons";
+import PostCard from "./PostCard";
+import { getPosts } from "../../services/api";
+import PageNavButtons from "../../Components/Common/PageNavButtons";
 
-export default function Home() {
+export default function HomePosts() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -33,7 +33,7 @@ export default function Home() {
           <PostCard key={post._id} post={post} />
         ))}
       </div>
-      <PageNavButtons page = {page} totalPages = {totalPages} setPage = {setPage}/>
+      <PageNavButtons page={page} totalPages={totalPages} setPage={setPage} />
     </div>
   );
 }

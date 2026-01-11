@@ -36,7 +36,6 @@ async function request(endpoint, options = {}) {
   return null; // Return null if there's no body
 }
 export function getUserProfile() {
-  console.log("User fetch");
   return request("/api/auth/profile");
 }
 
