@@ -16,16 +16,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     "Cache-Control",
-//     "no-store, no-cache, must-revalidate, proxy-revalidate"
-//   );
-//   res.setHeader("Pragma", "no-cache");
-//   res.setHeader("Expires", "0");
-//   res.setHeader("Surrogate-Control", "no-store");
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate"
+  );
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  res.setHeader("Surrogate-Control", "no-store");
+  next();
+});
         
 app.use(express.json());
 app.use(cookieParser());
@@ -44,10 +44,13 @@ app.use((err, req, res, next) => {
 
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal server error";
+  const errors = err.errors || null;
   return res.status(statusCode).json({
     success: false,
     statusCode,
     message,
+    source : "error handler",
+    ...(errors && { errors })
   });
 
 });

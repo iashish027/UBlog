@@ -1,7 +1,10 @@
-export const errorHandler = (statusCode, message) => {
-  const error = new Error();
-  error.statusCode = statusCode;
-  error.message = message;
-  
-  return error;
-};
+class ApiError extends Error {
+  constructor(statusCode, message, errors = null) {
+    super(message);
+    this.statusCode = statusCode;
+    this.errors = errors;
+    this.isOperational = true;
+  }
+}
+
+export { ApiError };

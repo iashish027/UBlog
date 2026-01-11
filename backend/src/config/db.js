@@ -5,13 +5,13 @@ import { env } from "./env.js"
 export const connectDB = async () => {
   try{
     await mongoose.connect(env.MONGODB_URI , {
-      serverSelectionTimeoutMS: 5000, // don't hang forever
+      serverSelectionTimeoutMS: 2000, // don't hang forever
       socketTimeoutMS: 45000,
       maxPoolSize: 10
     })
   }
   catch(err){
-    console.log(err);
+    throw err;
   }
 }
   
@@ -33,4 +33,3 @@ mongoose.connection.on("error", (err) => {
 });
 
 export const getDbStatus = () => isDbConnected;
-
